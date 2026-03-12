@@ -92,7 +92,7 @@ optimizer = optim.Adam(steer_model.parameters(), lr=0.001)
 
 print("\nTraining steering model...")
 
-for epoch in range(100):
+for epoch in range(1000):
 
     with torch.no_grad():
         lane_pred = lane_model(train_images)   # CNN output

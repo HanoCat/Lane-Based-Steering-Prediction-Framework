@@ -87,27 +87,37 @@ ax2.legend()
 # -------------------------------------------------
 # 3 Steering Output
 # -------------------------------------------------
-
 ax3.imshow(background, cmap="gray")
 
-gt_center = (gt[0] + gt[1]) / 2
-ax3.plot(gt_center, y, '--', color='yellow', linewidth=2, label='GT center')
-ax3.scatter(32, 60, c="white", s=80, label="vehicle")
+vehicle_x = center_plot
+vehicle_y = y
 
-ax3.quiver(
-    center_line,
-    y,
-    np.full_like(center_line, dx),
-    np.full_like(center_line, dy),
-    color="cyan",
-    angles='xy',
-    scale_units='xy',
-    scale=1,
-    width=0.004
-)
+ax3.scatter(vehicle_x, vehicle_y, c="white", s=25, label="vehicle positions")
+
+for i in range(len(y)):
+
+    # build partial centerline input
+    center_partial = center_pred.clone()
+    center_partial[:, i+1:] = center_partial[:, i].unsqueeze(1)
+
+    # predict steering for this position
+    steering_i = steer_model(center_partial).item()
+    dx = steering.item() * 6
+
+    ax3.arrow(
+        vehicle_x[i],
+        vehicle_y[i],
+        dx,
+        -y[i] /10 ,
+        color="cyan",
+        width=0.1,
+        head_width=1,
+        length_includes_head=True
+    )
+
 
 ax3.set_title("Steering Model Output")
-
+ax3.legend()
 # -------------------------------------------------
 # 4 Full Pipeline
 # -------------------------------------------------
@@ -120,17 +130,26 @@ ax4.scatter(pred_lanes[1], y, c="blue", label="pred right lane")
 ax4.scatter(gt[0], y, c="white", marker="x")
 ax4.scatter(gt[1], y, c="yellow", marker="x")
 
-ax4.quiver(
-    center_line,
-    y,
-    np.full_like(center_line, dx),
-    np.full_like(center_line, dy),
-    color="cyan",
-    angles='xy',
-    scale_units='xy',
-    scale=1,
-    width=0.004
-)
+for i in range(len(y)):
+
+    # build partial centerline input
+    center_partial = center_pred.clone()
+    center_partial[:, i+1:] = center_partial[:, i].unsqueeze(1)
+
+    # predict steering for this position
+    steering_i = steer_model(center_partial).item()
+    dx = steering.item() * 6
+
+    ax4.arrow(
+        vehicle_x[i],
+        vehicle_y[i],
+        dx,
+        -y[i] /10 ,
+        color="cyan",
+        width=0.1,
+        head_width=1,
+        length_includes_head=True
+    )
 
 ax4.set_title("Full Pipeline Output")
 ax4.legend()
