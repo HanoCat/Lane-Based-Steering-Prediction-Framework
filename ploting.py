@@ -34,15 +34,17 @@ with torch.no_grad():
     center_pred = (pred_lanes[:, :10] + pred_lanes[:, 10:]) / 2
     steering = steer_model(center_pred)
 
+num_point = 8 # max is 10 in the testing data
 # convert to numpy for plotting
 pred_lanes_plot = pred_lanes.numpy().reshape(2,10) * 64
 center_plot = (pred_lanes_plot[0] + pred_lanes_plot[1]) / 2
-
+center_plot = center_plot[:num_point]
 
 pred_lanes = pred_lanes.numpy().reshape(2,10) * 64
+pred_lanes = pred_lanes[:, :num_point]
 gt = test_lanes[0].numpy().reshape(2,10) * 64
-
-y = np.linspace(5,58,10)
+gt = gt[:, :num_point]
+y = np.linspace(5,58,num_point)
 
 dx = steering.item() * 8
 dy = -4
@@ -93,30 +95,14 @@ vehicle_x = center_plot
 vehicle_y = y
 
 ax3.scatter(vehicle_x, vehicle_y, c="white", s=25, label="vehicle positions")
+ax3.scatter(pred_lanes[0], y, c="red", label="pred left lane")
+ax3.scatter(pred_lanes[1], y, c="blue", label="pred right lane")
 
-for i in range(len(y)):
-
-    # build partial centerline input
-    center_partial = center_pred.clone()
-    center_partial[:, i+1:] = center_partial[:, i].unsqueeze(1)
-
-    # predict steering for this position
-    steering_i = steer_model(center_partial).item()
-    dx = steering.item() * 6
-
-    ax3.arrow(
-        vehicle_x[i],
-        vehicle_y[i],
-        dx,
-        -y[i] /10 ,
-        color="cyan",
-        width=0.1,
-        head_width=1,
-        length_includes_head=True
-    )
+ax3.scatter(gt[0], y, c="white", marker="x")
+ax3.scatter(gt[1], y, c="yellow", marker="x")
 
 
-ax3.set_title("Steering Model Output")
+ax3.set_title("vehicle Testing Positions")
 ax3.legend()
 # -------------------------------------------------
 # 4 Full Pipeline
@@ -129,8 +115,9 @@ ax4.scatter(pred_lanes[1], y, c="blue", label="pred right lane")
 
 ax4.scatter(gt[0], y, c="white", marker="x")
 ax4.scatter(gt[1], y, c="yellow", marker="x")
+ax4.scatter(vehicle_x, vehicle_y, c="white", s=25, label="vehicle positions")
 
-for i in range(len(y)):
+for i in range(len(y)-1):
 
     # build partial centerline input
     center_partial = center_pred.clone()
@@ -138,21 +125,31 @@ for i in range(len(y)):
 
     # predict steering for this position
     steering_i = steer_model(center_partial).item()
-    dx = steering.item() * 6
+    dx = steering.item()
 
     ax4.arrow(
         vehicle_x[i],
         vehicle_y[i],
         dx,
-        -y[i] /10 ,
+        -y[i] /6,
         color="cyan",
         width=0.1,
         head_width=1,
-        length_includes_head=True
+        length_includes_head=True,
     )
 
-ax4.set_title("Full Pipeline Output")
-ax4.legend()
+ax4.arrow(
+        vehicle_x[-1],
+        vehicle_y[-1],
+        dx,
+        -y[i] /6,
+        color="cyan",
+        width=0.1,
+        head_width=1,
+        length_includes_head=True,
+        label="vehicle steering output"
+    )
+ax4.set_title("Full Output ")
 
 plt.tight_layout()
 plt.show()
