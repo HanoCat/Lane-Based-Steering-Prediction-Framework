@@ -21,13 +21,11 @@ By separating these two tasks, the perception model focuses on understanding the
   
 # Pipeline Overview
 
-<p align="center">
-  <img src="pipeline.png" width="700">
-</p>
-
 The overall pipeline follows this structure:
 
-Example configuration used in this project:
+<p align="center">
+  <img src="img/pipeline.png" width="700">
+</p>
 
 
 ---
@@ -47,7 +45,7 @@ For example, the lane detection network could later be replaced with a more adva
 
 ---
 
-# Dataset
+# Synthetic Dataset
 
 For demonstration purposes, the project generates **synthetic road images containing lane markings**.
 
