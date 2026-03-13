@@ -24,7 +24,7 @@ By separating these two tasks, the perception model focuses on understanding the
 The overall pipeline follows this structure:
 
 <p align="center">
-  <img src="img/pipeline.png" width="700">
+  <img src="img/overview.jpg" width="700">
 </p>
 
 
