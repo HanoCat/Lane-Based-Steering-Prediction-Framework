@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.9-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-DeepLearning-red)
-![License](https://img.shields.io/badge/License-MIT-green)
 ![Status](https://img.shields.io/badge/Status-Research%20Example-orange)
 
 This repository contains a small example implementation from my Medium article on **lane-based steering prediction for autonomous driving**.
@@ -14,25 +13,7 @@ The system is composed of:
 - **Lane Detection Model (CNN)** – extracts lane geometry from the road image  
 - **Steering Model** – predicts the steering command based on the detected lane coordinates  
 
-By separating these two tasks, the perception model focuses on understanding the visual scene, while the second model focuses on computing the appropriate vehicle motion.
-
----
-
-  
-# Pipeline Overview
-
-The overall pipeline follows this structure:
-
-<p align="center">
-  <img src="img/overview.jpg" width="700">
-</p>
-
-
----
-
-# Project Purpose
-
-The goal of this example is to demonstrate how a **structured pipeline** can be used instead of a fully end-to-end approach.
+By separating these two tasks, the perception model focuses on understanding the visual scene, while the second model focuses on computing the appropriate vehicle motion. The goal of this example is to demonstrate how a **structured Framework** can be used instead of a fully end-to-end approach.
 
 Benefits of this design include:
 
@@ -42,6 +23,20 @@ Benefits of this design include:
 - Ability to improve or replace individual components independently  
 
 For example, the lane detection network could later be replaced with a more advanced perception model without modifying the steering model.
+
+
+---
+
+  
+# Framework Overview
+
+The overall Framework follows this structure:
+
+<p align="center">
+  <img src="img/overview.jpg" width="700">
+</p>
+
+
 
 ---
 
