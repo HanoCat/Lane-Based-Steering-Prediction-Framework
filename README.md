@@ -6,7 +6,7 @@
 
 This repository contains a small example implementation from my Medium article on **lane-based steering prediction for autonomous driving**.
 
-Instead of training a single end-to-end neural network to directly output steering commands from images, this project demonstrates a **modular approach** where perception and control are separated into two components.
+Instead of training a single end-to-end neural network to directly output steering commands from images, this project demonstrates an approach where perception and control are separated into two components.
 
 The system is composed of:
 
